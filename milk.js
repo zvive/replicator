@@ -97,14 +97,14 @@ while (true) {
     let SerSec = ns.getServerSecurityLevel(host);
     // Do all the things
     if (SerSec > MinSec) {
-        ns.exec("w.js", "home", HWthreads, host);
-        ns.run("w.js", LWthreads, host);
+        ns.exec("/replicator/w.js", "home", HWthreads, host);
+        ns.run("/replicator/w.js", LWthreads, host);
     } else if (SerCash < MaxCash) {
-        ns.exec("g.js", "home", HGthreads, host);
-        ns.run("g.js", LGthreads, host);
+        ns.exec("/replicator/g.js", "home", HGthreads, host);
+        ns.run("/replicator/g.js", LGthreads, host);
     } else {
         while (ns.getServerMoneyAvailable(host) > DrainGoal) {
-            ns.run("h.js", HHthreads, host);
+            ns.run("/replicator/h.js", HHthreads, host);
             ns.sleep(1000);
         }
     }

@@ -1,4 +1,4 @@
-// ramless_hacker.script
+// ramless_hacker.js
 // Hack if seclev is lowest and money is max.
 // Hack until you have removed 10% of the max money.
 export async function main(ns){
@@ -14,10 +14,10 @@ export async function main(ns){
     let MyRAM = 1024;
 
     // ramless Hacker RAM
-    let ramless_hackerRAM = ns.getScriptRam("ramless_hacker.script");
-    let HackRAM = ns.getScriptRam("h.script");
-    let WeakenRAM = ns.getScriptRam("w.script");
-    let GrowRAM = ns.getScriptRam("g.script");
+    let ramless_hackerRAM = ns.getScriptRam("/replicator/ramless_hacker.js");
+    let HackRAM = ns.getScriptRam("/replicator/h.js");
+    let WeakenRAM = ns.getScriptRam("/replicator/w.js");
+    let GrowRAM = ns.getScriptRam("/replicator/g.js");
 
     // When to stop hacking. 0.9 hacks to 90% (it takes 10% out)
     let MaxCash = ns.getServerMaxMoney(serv);
@@ -51,12 +51,12 @@ export async function main(ns){
 
         // Do all the things
         if (SerSec > MinSec) {
-            ns.run("w.script", Wthreads, serv);
+            ns.run("/replicator/w.js", Wthreads, serv);
         } else if (SerCash < MaxCash) {
-            ns.run("g.script", Gthreads, serv);
+            ns.run("/replicator/g.js", Gthreads, serv);
         } else {
             while (ns.getServerMoneyAvailable(serv) > DrainGoal) {
-                ns.run("h.script", Hthreads, serv);
+                ns.run("/replicator/h.js", Hthreads, serv);
             }
         }
     }

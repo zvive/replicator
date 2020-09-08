@@ -55,13 +55,13 @@ export async function main(ns){
             // Otherwise start main function
             default:
                 if (ns.serverExists(serv)) {
-                    files = ["replicator.js", "milk.js", "h.js", "g.js", "w.js", "_replicator.time.txt"];
+                    files = ["/replicator/replicator.js", "/replicator/milk.js", "/replicator/h.js", "/replicator/g.js", "/replicator/w.js", "/replicator/_replicator.time.txt"];
                     ns.scp(files, "home", serv);
                     // Servers that have no RAM... Lets hack'em anyway :)
                     NextTargetRes = ns.getServerRam(serv);
                     NextTargetRAM = NextTargetRes[0];
                     if (NextTargetRAM < 1) {
-                        ns.exec("ramless.js", "home", 1, serv);
+                        ns.exec("/replicator/ramless.js", "home", 1, serv);
                     }
                     // No root access? Break open and nuke, if home has enough programs.
                     if (!ns.hasRootAccess(serv)) {
@@ -111,11 +111,11 @@ export async function main(ns){
                     }
 
                     // Is this a new run, or part of the last run?
-                    if (ns.read("_replicator.time.txt") > ns.read("_replicator.time.last.txt")) {
+                    if (ns.read("/replicator/_replicator.time.txt") > ns.read("/replicator/_replicator.time.last.txt")) {
                         if (NextTargetRAM > 1) {
                             ns.killall(serv);
                             ns.sleep(2000);
-                            ns.exec("replicator.js", serv, 1);
+                            ns.exec("/replicator/replicator.js", serv, 1);
                         }
                     }
                 }
@@ -133,20 +133,20 @@ export async function main(ns){
         // RAMLess Hacker? Take the args passed into replicator that would have 
         // only come from trying to attack a server without ram.
         case (serv.match(/-hack$/) || {}).input:
-            if (!ns.fileExists("_replicator.time.last.txt")) {
-                ns.write("_replicator.time.last.txt", data = 0, mode = "w");
+            if (!ns.fileExists("/replicator/_replicator.time.last.txt")) {
+                ns.write("/replicator/_replicator.time.last.txt", data = 0, mode = "w");
             }
-            ns.write("_replicator.time.last.txt", data = ns.read("_replicator.time.txt"), mode = "w");
-            ns.exec("ramless_hacker.js", "home", 1, serv);
+            ns.write("/replicator/_replicator.time.last.txt", data = ns.read("/replicator/_replicator.time.txt"), mode = "w");
+            ns.exec("/replicator/ramless_hacker.js", "home", 1, serv);
             ns.sleep(5000);
             break;
         // If everything else didn't trigger then behave normally.
         default:
-            if (!ns.fileExists("_replicator.time.last.txt")) {
-                ns.write("_replicator.time.last.txt", data = 0, mode = "w");
+            if (!ns.fileExists("/replicator/_replicator.time.last.txt")) {
+                ns.write("/replicator/_replicator.time.last.txt", data = 0, mode = "w");
             }
-            ns.write("_replicator.time.last.txt", data = ns.read("_replicator.time.txt"), mode = "w");
-            ns.exec("milk.js", ns.getHostname(), 1);
+            ns.write("/replicator/.time.last.txt", data = ns.read("/replicator/_replicator.time.txt"), mode = "w");
+            ns.exec("/replicator/milk.js", ns.getHostname(), 1);
             ns.sleep(5000);
             break;
     }

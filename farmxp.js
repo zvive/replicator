@@ -1,4 +1,4 @@
-// farmxp.script
+// farmxp.js
 // Hack if seclev is lowest and money is max.
 // Hack until you have removed 10% of the max money.
 export async function main(ns){
@@ -10,10 +10,10 @@ export async function main(ns){
         let LocalRam = hereRAM[0];
 
         // milks RAM
-        let farmxpRAM = Math.floor(ns.getScriptRam("farmxp.script"));
+        let farmxpRAM = Math.floor(ns.getScriptRam("/replicator/farmxp.js"));
 
         // RAM for local Hack, Grow and Weaken
-        let WeakenRAM = Math.floor(ns.getScriptRam("w.script"));
+        let WeakenRAM = Math.floor(ns.getScriptRam("/replicator/w.js"));
 
         // RAM on host after maill is running
         // I'll probably write this at some point to be more dynamic, but right now it's fine.
@@ -26,7 +26,7 @@ export async function main(ns){
         // === All above should be constant
 
         while (true) {
-                ns.run("w.script", LWthreads, "foodnstuff");
+                ns.run("/replicator/w.js", LWthreads, "foodnstuff");
                 ns.sleep(3000);
         }
 }

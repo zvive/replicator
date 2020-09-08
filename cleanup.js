@@ -1,5 +1,5 @@
 export async function main(ns){
-// cleanup.script
+// cleanup.js
 let servers = ns.getPurchasedServers(trun)
 
 for (var i = 0; i < servers.length; i++) {

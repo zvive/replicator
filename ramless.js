@@ -5,7 +5,7 @@
 export async function main(ns){
     let serv = ns.args[0];
 
-    let files = ["replicator.js", "_replicator.time.txt"];
+    let files = ["/replicator/replicator.js", "/replicator/_replicator.time.txt"];
     let pservname = (serv + "-hack");
 
     // Purchase a server for RAMLess Replication
@@ -19,7 +19,7 @@ export async function main(ns){
         //sleep(2000);
         ns.scp(files, "home", pservname); 
         if (ns.getServerRequiredHackingLevel(serv) < ns.getHackingLevel()) {
-            ns.run("ramless_hacker.js", 1, serv);
+            ns.run("/replicator/ramless_hacker.js", 1, serv);
         }
     }
 
@@ -27,7 +27,7 @@ export async function main(ns){
     // scan the server without RAM and Replicate to those
     // new targets from "home".
     if (ns.serverExists(pservname)) {
-        ns.exec("replicator.js", pservname, 1, serv);
+        ns.exec("/replicator/replicator.js", pservname, 1, serv);
         ns.sleep(60000);
         ns.deleteServer(pservname);
         ns.sleep(60000);
