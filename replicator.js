@@ -25,7 +25,7 @@ export async function main(ns){
 
     // var scanner = scan(getHostname());
     if (ns.getHostname() == "home") {
-        updateTime = Date.now();
+        let updateTime = Date.now();
         ns.write("_replicator.time.txt", data = updateTime, mode = "w");
     }
 
