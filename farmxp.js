@@ -27,6 +27,6 @@ export async function main(ns){
 
         while (true) {
                 ns.run("/replicator/w.js", LWthreads, "foodnstuff");
-                ns.sleep(3000);
+                await ns.sleep(3000);
         }
 }

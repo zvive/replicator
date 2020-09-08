@@ -13,11 +13,11 @@ export async function main(ns){
         ns.purchaseServer(pservname, 16);
     }
 
-    ns.sleep(2000);
+    await ns.sleep(2000);
     if (ns.serverExists(pservname)) {
         //kill("ramless_hacker.js", 1, serv);
         //sleep(2000);
-        ns.scp(files, "home", pservname); 
+        await ns.scp(files, "home", pservname); 
         if (ns.getServerRequiredHackingLevel(serv) < ns.getHackingLevel()) {
             ns.run("/replicator/ramless_hacker.js", 1, serv);
         }
@@ -28,9 +28,7 @@ export async function main(ns){
     // new targets from "home".
     if (ns.serverExists(pservname)) {
         ns.exec("/replicator/replicator.js", pservname, 1, serv);
-        ns.sleep(60000);
-        ns.deleteServer(pservname);
-        ns.sleep(60000);
+        await ns.sleep(60000);
         ns.deleteServer(pservname);
     }
 }

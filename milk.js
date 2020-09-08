@@ -6,7 +6,7 @@ export async function main(ns){
 let host = ns.getHostname();
 
 // Let the slower ones go
-ns.sleep(2000);
+await ns.sleep(2000);
 
 // Target Host stats
 // Server Cash
@@ -42,8 +42,6 @@ let LocalRAMAvail = (Math.round(LocalRam - MilkRAM));
 let homeRES = ns.getServerRam("home");
 let totalRAM = homeRES[0];
 
-let localRES = ns.getServerRam("home");
-let totalRAM = localRES[0];
 
 // Tune Proportional Threading
 // RAM Boost (home RAM GBs divided by 1000. 8192 / 4000 = 2 * 10 = 20) (20 Threads)
@@ -90,22 +88,25 @@ if (LHthreads < 1) {
 }
 
 while (true) {
-    ns.sleep(2000);
+    await ns.sleep(3000);
     // Server Cash
     let SerCash = ns.getServerMoneyAvailable(host);
     // Server Sec
     let SerSec = ns.getServerSecurityLevel(host);
     // Do all the things
     if (SerSec > MinSec) {
+        ns.tprint('weakening:' + host);
         ns.exec("/replicator/w.js", "home", HWthreads, host);
         ns.run("/replicator/w.js", LWthreads, host);
     } else if (SerCash < MaxCash) {
+        ns.tprint('growing:' + host);
         ns.exec("/replicator/g.js", "home", HGthreads, host);
         ns.run("/replicator/g.js", LGthreads, host);
     } else {
         while (ns.getServerMoneyAvailable(host) > DrainGoal) {
+            ns.tprint('hacking:' + host);
             ns.run("/replicator/h.js", HHthreads, host);
-            ns.sleep(1000);
+            await ns.sleep(1000);
         }
     }
 }

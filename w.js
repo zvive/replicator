@@ -1,3 +1,3 @@
 export async function main(ns){
-  ns.weaken(args[0]);
+  await ns.weaken(args[0]);
 }

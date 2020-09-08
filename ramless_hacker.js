@@ -36,7 +36,8 @@ export async function main(ns){
     // === All above should be constant
     // === All below are dynamic
     while (true) {
-        ns.sleep(2000);
+        ns.tprint('sleep 2000');
+        await ns.sleep(2000);
         // Target Host stats
 
         // Server Cash
@@ -51,12 +52,17 @@ export async function main(ns){
 
         // Do all the things
         if (SerSec > MinSec) {
+            ns.tprint('weakening: ' + serv);
             ns.run("/replicator/w.js", Wthreads, serv);
         } else if (SerCash < MaxCash) {
+            ns.tprint('growing: ' + serv);
             ns.run("/replicator/g.js", Gthreads, serv);
         } else {
             while (ns.getServerMoneyAvailable(serv) > DrainGoal) {
+                ns.tprint('hacking: ' + serv);
                 ns.run("/replicator/h.js", Hthreads, serv);
+                ns.tprint('sleep 1000');
+                await ns.sleep(1000);
             }
         }
     }
