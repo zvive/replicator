@@ -1,6 +1,6 @@
 export async function main(ns){
 // cleanup.js
-let servers = await ns.getPurchasedServers(trun)
+let servers = ns.getPurchasedServers(trun)
 
 for (var i = 0; i < servers.length; i++) {
     var serv = servers[i];
@@ -8,7 +8,7 @@ for (var i = 0; i < servers.length; i++) {
         case "TradingHouse":
             break;
         default:
-            await ns.deleteServer(serv);
+            ns.deleteServer(serv);
     }
 }
 }

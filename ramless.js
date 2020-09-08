@@ -10,18 +10,18 @@ export async function main(ns){
 
     // Purchase a server for RAMLess Replication
     if (!ns.serverExists(pservname)) {
-        await ns.purchaseServer(pservname, 16);
+       ns.purchaseServer(pservname, 16);
     }
 
     await ns.sleep(2000);
     if (ns.serverExists(pservname)) {
         //kill("ramless_hacker.js", 1, serv);
         //sleep(2000);
-        await ns.tprint("copying files to: " + pservname);
-        await ns.scp(files, "home", pservname); 
+        ns.tprint("copying files to: " + pservname);
+        ns.scp(files, "home", pservname); 
         if (ns.getServerRequiredHackingLevel(serv) < ns.getHackingLevel()) {
-            await ns.tprint("running ramless on: " + serv);
-            await ns.run("/replicator/ramless_hacker.js", 1, serv);
+            ns.tprint("running ramless on: " + serv);
+            ns.run("/replicator/ramless_hacker.js", 1, serv);
         }
     }
 
@@ -29,9 +29,9 @@ export async function main(ns){
     // scan the server without RAM and Replicate to those
     // new targets from "home".
     if (ns.serverExists(pservname)) {
-        await ns.tprint("starting replicator on: " + pservname);
-        await ns.exec("/replicator/replicator.js", pservname, 1, serv);
-        await ns.sleep(60000);
-        await ns.deleteServer(pservname);
+        ns.tprint("starting replicator on: " + pservname);
+        ns.exec("/replicator/replicator.js", pservname, 1, serv);
+        ns.sleep(60000);
+        ns.deleteServer(pservname);
     }
 }
