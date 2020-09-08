@@ -10,7 +10,7 @@ export async function main(ns){
 
     // Purchase a server for RAMLess Replication
     if (!ns.serverExists(pservname)) {
-        ns.purchaseServer(pservname, 16);
+        await ns.purchaseServer(pservname, 16);
     }
 
     await ns.sleep(2000);
@@ -19,7 +19,7 @@ export async function main(ns){
         //sleep(2000);
         await ns.scp(files, "home", pservname); 
         if (ns.getServerRequiredHackingLevel(serv) < ns.getHackingLevel()) {
-            ns.run("/replicator/ramless_hacker.js", 1, serv);
+            await ns.run("/replicator/ramless_hacker.js", 1, serv);
         }
     }
 
@@ -27,8 +27,8 @@ export async function main(ns){
     // scan the server without RAM and Replicate to those
     // new targets from "home".
     if (ns.serverExists(pservname)) {
-        ns.exec("/replicator/replicator.js", pservname, 1, serv);
+        await ns.exec("/replicator/replicator.js", pservname, 1, serv);
         await ns.sleep(60000);
-        ns.deleteServer(pservname);
+        await ns.deleteServer(pservname);
     }
 }

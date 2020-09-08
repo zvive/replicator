@@ -4,7 +4,7 @@
 export async function main(ns){
 
     // Programs on home
-    ns.print('checking programs');
+    ns.tprint('checking programs');
     var programs = ["brutessh.exe",
         "ftpcrack.exe",
         "relaysmtp.exe",
@@ -19,7 +19,7 @@ export async function main(ns){
         var prog = programs[j];
         if (ns.fileExists(prog, "home")) {
             progs++;
-            ns.print(progs + ' found');
+            await ns.tprint(progs + ' found');
         }
     }
 
@@ -32,10 +32,10 @@ export async function main(ns){
     //var servers2 = [getHostname()];
     //var scanner = scan(getHostname());
     if (ns.args[0] !== null) {
-        var servers = ns.scan(ns.args[0]);
+        var servers = await ns.scan(ns.args[0]);
     } else {
         //var servers = servers2.concat(scanner);
-        var servers = ns.scan(ns.getHostname());
+        var servers = await ns.scan(ns.getHostname());
     }
 
     // Main routine
@@ -50,7 +50,7 @@ export async function main(ns){
             case (ns.args[0]):
                 break;
             // If Self, Skip.
-            case ns.getHostname():
+            case await ns.getHostname():
                 break;
             // Otherwise start main function
             default:
@@ -58,15 +58,15 @@ export async function main(ns){
                     let files = ["/replicator/replicator.js", "/replicator/milk.js", "/replicator/h.js", "/replicator/g.js", "/replicator/w.js", "/replicator/_replicator.time.txt"];
                     await ns.scp(files, "home", serv);
                     // Servers that have no RAM... Lets hack'em anyway :)
-                    let NextTargetRes = ns.getServerRam(serv);
+                    let NextTargetRes = await ns.getServerRam(serv);
                     let NextTargetRAM = NextTargetRes[0];
                     if (NextTargetRAM < 1) {
-                        ns.exec("/replicator/ramless.js", "home", 1, serv);
+                        await ns.exec("/replicator/ramless.js", "home", 1, serv);
                     }
                     // No root access? Break open and nuke, if home has enough programs.
                     if (!ns.hasRootAccess(serv)) {
                         if (ns.getServerRequiredHackingLevel(serv) > ns.getHackingLevel()) {} else {
-                            var ports = ns.getServerNumPortsRequired(serv);
+                            var ports = await ns.getServerNumPortsRequired(serv);
                             if (!ns.fileExists(programs[5], "home")) {} else if (ports + 1 > progs) {
                                 for (; progs < ports + 1;) {
                                     var progs = 0;
@@ -80,32 +80,32 @@ export async function main(ns){
                             } else {
                                 for (var j = 0; j < ports; j++) {
                                     if (ns.fileExists(programs[0], "home")) {
-                                        ns.brutessh(serv);
+                                        await ns.brutessh(serv);
                                         j++;
                                         if (j >= ports) { break; }
                                     }
                                     if (ns.fileExists(programs[1], "home")) {
-                                        ns.ftpcrack(serv);
+                                        await ns.ftpcrack(serv);
                                         j++;
                                         if (j >= ports) { break; }
                                     }
                                     if (ns.fileExists(programs[2], "home")) {
-                                        ns.relaysmtp(serv);
+                                        await ns.relaysmtp(serv);
                                         j++;
                                         if (j >= ports) { break; }
                                     }
                                     if (ns.fileExists(programs[3], "home")) {
-                                        ns.httpworm(serv);
+                                        await ns.httpworm(serv);
                                         j++;
                                         if (j >= ports) { break; }
                                     }
                                     if (ns.fileExists(programs[4], "home")) {
-                                        ns.sqlinject(serv);
+                                        await ns.sqlinject(serv);
                                         j++;
                                         if (j >= ports) { break; }
                                     }
                                 }
-                                ns.nuke(serv);
+                                await ns.nuke(serv);
                             }
                         }
                     }
@@ -113,9 +113,9 @@ export async function main(ns){
                     // Is this a new run, or part of the last run?
                     if (ns.read("/replicator/_replicator.time.txt") > ns.read("/replicator/_replicator.time.last.txt")) {
                         if (NextTargetRAM > 1) {
-                            ns.killall(serv);
+                            await ns.killall(serv);
                             await ns.sleep(2000);
-                            ns.exec("/replicator/replicator.js", serv, 1);
+                            await ns.exec("/replicator/replicator.js", serv, 1);
                         }
                     }
                 }
@@ -134,19 +134,19 @@ export async function main(ns){
         // only come from trying to attack a server without ram.
         case (serv.match(/-hack$/) || {}).input:
             if (!ns.fileExists("/replicator/_replicator.time.last.txt")) {
-                ns.write("/replicator/_replicator.time.last.txt", 0, "w");
+                await ns.write("/replicator/_replicator.time.last.txt", 0, "w");
             }
-            ns.write("/replicator/_replicator.time.last.txt", ns.read("/replicator/_replicator.time.txt") , "w");
-            ns.exec("/replicator/ramless_hacker.js", "home", 1, serv);
+            await ns.write("/replicator/_replicator.time.last.txt", ns.read("/replicator/_replicator.time.txt") , "w");
+            await ns.exec("/replicator/ramless_hacker.js", "home", 1, serv);
             await ns.sleep(5000);
             break;
         // If everything else didn't trigger then behave normally.
         default:
             if (!ns.fileExists("/replicator/_replicator.time.last.txt")) {
-                ns.write("/replicator/_replicator.time.last.txt", 0, "w");
+                await ns.write("/replicator/_replicator.time.last.txt", 0, "w");
             }
-            ns.write("/replicator/.time.last.txt", ns.read("/replicator/_replicator.time.txt"), "w");
-            ns.exec("/replicator/milk.js", ns.getHostname(), 1);
+            await ns.write("/replicator/.time.last.txt", ns.read("/replicator/_replicator.time.txt"), "w");
+            await ns.exec("/replicator/milk.js", ns.getHostname(), 1);
             await ns.sleep(5000);
             break;
     }

@@ -3,10 +3,10 @@
 // Hack until you have removed 10% of the max money.
 export async function main(ns){
 
-        let host = ns.getHostname();
+        let host = await ns.getHostname();
 
         // Local RAM
-        let hereRAM = ns.getServerRam(host);
+        let hereRAM = await ns.getServerRam(host);
         let LocalRam = hereRAM[0];
 
         // milks RAM
@@ -26,7 +26,7 @@ export async function main(ns){
         // === All above should be constant
 
         while (true) {
-                ns.run("/replicator/w.js", LWthreads, "foodnstuff");
+                await ns.run("/replicator/w.js", LWthreads, "foodnstuff");
                 await ns.sleep(3000);
         }
 }

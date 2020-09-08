@@ -3,14 +3,14 @@ export async function main(ns){
 // milk.js
 // Hack if seclev is lowest and money is max.
 // Hack until you have removed 10% of the max money.
-let host = ns.getHostname();
+let host = await ns.getHostname();
 
 // Let the slower ones go
 await ns.sleep(2000);
 
 // Target Host stats
 // Server Cash
-let MaxCash = ns.getServerMaxMoney(host);
+let MaxCash = await ns.getServerMaxMoney(host);
 
 // No cash. Exit.
 if (MaxCash < 1) {
@@ -18,11 +18,11 @@ if (MaxCash < 1) {
 }
 
 // Server Sec
-let SerSec = ns.getServerSecurityLevel(host);
-let MinSec = ns.getServerMinSecurityLevel(host);
+let SerSec = await ns.getServerSecurityLevel(host);
+let MinSec = await ns.getServerMinSecurityLevel(host);
 
 // Local RAM
-let hereRAM = ns.getServerRam(host);
+let hereRAM = await ns.getServerRam(host);
 let LocalRam = hereRAM[0];
 
 // milks RAM
@@ -39,7 +39,7 @@ let LocalRAMAvail = (Math.round(LocalRam - MilkRAM));
 
 // Proportional threading
 // Now takes RAM into account
-let homeRES = ns.getServerRam("home");
+let homeRES = await ns.getServerRam("home");
 let totalRAM = homeRES[0];
 
 
@@ -90,22 +90,22 @@ if (LHthreads < 1) {
 while (true) {
     await ns.sleep(3000);
     // Server Cash
-    let SerCash = ns.getServerMoneyAvailable(host);
+    let SerCash = await ns.getServerMoneyAvailable(host);
     // Server Sec
-    let SerSec = ns.getServerSecurityLevel(host);
+    let SerSec = await ns.getServerSecurityLevel(host);
     // Do all the things
     if (SerSec > MinSec) {
-        ns.tprint('weakening:' + host);
-        ns.exec("/replicator/w.js", "home", HWthreads, host);
-        ns.run("/replicator/w.js", LWthreads, host);
+        await ns.tprint('weakening:' + host);
+        await ns.exec("/replicator/w.js", "home", HWthreads, host);
+        await ns.run("/replicator/w.js", LWthreads, host);
     } else if (SerCash < MaxCash) {
-        ns.tprint('growing:' + host);
-        ns.exec("/replicator/g.js", "home", HGthreads, host);
-        ns.run("/replicator/g.js", LGthreads, host);
+        await ns.tprint('growing:' + host);
+        await ns.exec("/replicator/g.js", "home", HGthreads, host);
+        await ns.run("/replicator/g.js", LGthreads, host);
     } else {
         while (ns.getServerMoneyAvailable(host) > DrainGoal) {
-            ns.tprint('hacking:' + host);
-            ns.run("/replicator/h.js", HHthreads, host);
+            await ns.tprint('hacking:' + host);
+            await ns.run("/replicator/h.js", HHthreads, host);
             await ns.sleep(1000);
         }
     }
