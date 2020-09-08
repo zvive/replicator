@@ -26,12 +26,12 @@ let hereRAM = await ns.getServerRam(host);
 let LocalRam = hereRAM[0];
 
 // milks RAM
-let MilkRAM = Math.floor(ns.getScriptRam("milk.js"));
+let MilkRAM = Math.floor(ns.getScriptRam("/replicator/milk.js"));
 
 // RAM for local Hack, Grow and Weaken
-let HackRAM = Math.round(ns.getScriptRam("h.js"));
-let GrowRAM = Math.round(ns.getScriptRam("g.js"));
-let WeakenRAM = Math.round(ns.getScriptRam("w.js"));
+let HackRAM = Math.round(ns.getScriptRam("/replicator/h.js"));
+let GrowRAM = Math.round(ns.getScriptRam("/replicator/g.js"));
+let WeakenRAM = Math.round(ns.getScriptRam("/replicator/w.js"));
 
 // RAM on host after maill is running
 // I'll probably write this at some point to be more dynamic, but right now it's fine.

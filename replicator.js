@@ -26,7 +26,8 @@ export async function main(ns){
     // var scanner = scan(getHostname());
     if (ns.getHostname() == "home") {
         let updateTime = Date.now();
-        ns.write("_replicator.time.txt", updateTime, "w");
+        await ns.tprint("updating replication time: " + serv);
+        await ns.write("/replicator/_replicator.time.txt", updateTime, "w");
     }
 
     //var servers2 = [getHostname()];
@@ -35,6 +36,7 @@ export async function main(ns){
         var servers = await ns.scan(ns.args[0]);
     } else {
         //var servers = servers2.concat(scanner);
+        await ns.tprint("scanning: " + ns.getHostname());
         var servers = await ns.scan(ns.getHostname());
     }
 
@@ -56,11 +58,13 @@ export async function main(ns){
             default:
                 if (ns.serverExists(serv)) {
                     let files = ["/replicator/replicator.js", "/replicator/milk.js", "/replicator/h.js", "/replicator/g.js", "/replicator/w.js", "/replicator/_replicator.time.txt"];
+                    await ns.tprint("copying replicator files to: " + serv);
                     await ns.scp(files, "home", serv);
                     // Servers that have no RAM... Lets hack'em anyway :)
                     let NextTargetRes = await ns.getServerRam(serv);
                     let NextTargetRAM = NextTargetRes[0];
                     if (NextTargetRAM < 1) {
+                        await ns.tprint("running ramless on: " + serv);
                         await ns.exec("/replicator/ramless.js", "home", 1, serv);
                     }
                     // No root access? Break open and nuke, if home has enough programs.
@@ -136,7 +140,7 @@ export async function main(ns){
             if (!ns.fileExists("/replicator/_replicator.time.last.txt")) {
                 await ns.write("/replicator/_replicator.time.last.txt", 0, "w");
             }
-            await ns.write("/replicator/_replicator.time.last.txt", ns.read("/replicator/_replicator.time.txt") , "w");
+            await ns.write("/replicator/_replicator.time.last.txt", await ns.read("/replicator/_replicator.time.txt"), "w");
             await ns.exec("/replicator/ramless_hacker.js", "home", 1, serv);
             await ns.sleep(5000);
             break;
@@ -145,8 +149,8 @@ export async function main(ns){
             if (!ns.fileExists("/replicator/_replicator.time.last.txt")) {
                 await ns.write("/replicator/_replicator.time.last.txt", 0, "w");
             }
-            await ns.write("/replicator/.time.last.txt", ns.read("/replicator/_replicator.time.txt"), "w");
-            await ns.exec("/replicator/milk.js", ns.getHostname(), 1);
+            await ns.write("/replicator/.time.last.txt", await ns.read("/replicator/_replicator.time.txt"), "w");
+            await ns.exec("/replicator/milk.js", await ns.getHostname(), 1);
             await ns.sleep(5000);
             break;
     }

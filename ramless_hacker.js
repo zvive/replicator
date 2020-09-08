@@ -12,15 +12,15 @@ export async function main(ns){
     let MyRAM = 1024;
 
     // ramless Hacker RAM
-    let WeakenRAM = ns.getScriptRam("/replicator/w.js");
-    let GrowRAM = ns.getScriptRam("/replicator/g.js");
+    let WeakenRAM = await ns.getScriptRam("/replicator/w.js");
+    let GrowRAM = await ns.getScriptRam("/replicator/g.js");
 
     // When to stop hacking. 0.9 hacks to 90% (it takes 10% out)
-    let MaxCash = ns.getServerMaxMoney(serv);
+    let MaxCash = await ns.getServerMaxMoney(serv);
     let DrainGoal = (MaxCash * 0.9);
 
     // Minimum Security level on the target
-    let MinSec = ns.getServerMinSecurityLevel(serv);
+    let MinSec = await ns.getServerMinSecurityLevel(serv);
 
     // Grow Threads
     let Gthreads = Math.round(MyRAM / GrowRAM);
@@ -37,10 +37,10 @@ export async function main(ns){
         // Target Host stats
 
         // Server Cash
-        let SerCash = ns.getServerMoneyAvailable(serv);
+        let SerCash = await ns.getServerMoneyAvailable(serv);
 
         // Server Sec
-        let SerSec = ns.getServerSecurityLevel(serv);
+        let SerSec = await ns.getServerSecurityLevel(serv);
 
         // Target Host stats end
 
