@@ -95,16 +95,16 @@ while (true) {
     let SerSec = ns.getServerSecurityLevel(host);
     // Do all the things
     if (SerSec > MinSec) {
-        ns.tprint('weakening:' + host);
+        ns.print('weakening:' + host);
         ns.exec("/replicator/w.js", "home", HWthreads, host);
         ns.run("/replicator/w.js", LWthreads, host);
     } else if (SerCash < MaxCash) {
-        ns.tprint('growing:' + host);
+        ns.print('growing:' + host);
         ns.exec("/replicator/g.js", "home", HGthreads, host);
         ns.run("/replicator/g.js", LGthreads, host);
     } else {
         while (ns.getServerMoneyAvailable(host) > DrainGoal) {
-            ns.tprint('hacking:' + host);
+            ns.print('hacking:' + host);
             ns.run("/replicator/h.js", HHthreads, host);
             await ns.sleep(1000);
         }

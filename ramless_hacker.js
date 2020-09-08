@@ -3,7 +3,7 @@
 // Hack until you have removed 10% of the max money.
 export async function main(ns){
     let serv = ns.args[0];
-    ns.tprint(ns.getHostname() + ": RAMLessHacker Starting  " + serv); 
+    ns.print(ns.getHostname() + ": RAMLessHacker Starting  " + serv); 
 
     // Targets RAM
 
@@ -47,14 +47,14 @@ export async function main(ns){
 
         // Do all the things
         if (SerSec > MinSec) {
-            ns.tprint('weakening: ' + serv);
+            ns.print('weakening: ' + serv);
             ns.run("/replicator/w.js", Wthreads, serv);
         } else if (SerCash < MaxCash) {
-            ns.tprint('growing: ' + serv);
+            ns.print('growing: ' + serv);
             ns.run("/replicator/g.js", Gthreads, serv);
         } else {
             while (ns.getServerMoneyAvailable(serv) > DrainGoal) {
-                ns.tprint('hacking: ' + serv);
+                ns.print('hacking: ' + serv);
                 ns.run("/replicator/h.js", Hthreads, serv);
                 await ns.sleep(1000);
             }

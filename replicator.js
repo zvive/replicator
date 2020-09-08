@@ -4,7 +4,7 @@
 export async function main(ns){
 
     // Programs on home
-    ns.tprint('checking programs');
+    ns.print('checking programs');
     var programs = ["brutessh.exe",
         "ftpcrack.exe",
         "relaysmtp.exe",
@@ -62,7 +62,7 @@ export async function main(ns){
                     let NextTargetRes = await ns.getServerRam(serv);
                     let NextTargetRAM = NextTargetRes[0];
                     if (NextTargetRAM < 1) {
-                        await ns.tprint("running ramless on: " + serv);
+                        ns.print("running ramless on: " + serv);
                         ns.exec("/replicator/ramless.js", "home", 1, serv);
                     }
                     // No root access? Break open and nuke, if home has enough programs.
